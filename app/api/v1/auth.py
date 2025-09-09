@@ -263,14 +263,14 @@ async def create_session(user: User = Depends(get_current_user)):
 
 @router.patch("/session/{session_id}/name", response_model=SessionResponse)
 async def update_session_name(
-    session_id: str, name: str = Form(...), current_session: Session = Depends(get_current_session)
+    session_id: str, name: str = Form(...), current_user: User = Depends(get_current_user)
 ):
     """Update a session's name.
 
     Args:
         session_id: The ID of the session to update
         name: The new name for the session
-        current_session: The current session from auth
+        current_user: The current user from auth
 
     Returns:
         SessionResponse: The updated session information
@@ -279,16 +279,20 @@ async def update_session_name(
         # Sanitize inputs
         sanitized_session_id = sanitize_string(session_id)
         sanitized_name = sanitize_string(name)
-        sanitized_current_session = sanitize_string(current_session.id)
 
-        # Verify the session ID matches the authenticated session
-        if sanitized_session_id != sanitized_current_session:
-            raise HTTPException(status_code=403, detail="Cannot modify other sessions")
+        # Get the session to be updated
+        session_to_update = await db_service.get_session(sanitized_session_id)
+        if not session_to_update:
+            raise HTTPException(status_code=404, detail="Session not found")
+
+        # Verify the session belongs to the current user
+        if session_to_update.user_id != current_user.id:
+            raise HTTPException(status_code=403, detail="Cannot modify sessions of other users")
 
         # Update the session name
         session = await db_service.update_session_name(sanitized_session_id, sanitized_name)
 
-        # Create a new token (not strictly necessary but maintains consistency)
+        # Create a new token for the session being updated
         token = create_access_token(sanitized_session_id)
 
         return SessionResponse(session_id=sanitized_session_id, name=session.name, token=token)
@@ -298,12 +302,12 @@ async def update_session_name(
 
 
 @router.delete("/session/{session_id}")
-async def delete_session(session_id: str, current_session: Session = Depends(get_current_session)):
+async def delete_session(session_id: str, current_user: User = Depends(get_current_user)):
     """Delete a session for the authenticated user.
 
     Args:
         session_id: The ID of the session to delete
-        current_session: The current session from auth
+        current_user: The current user from auth
 
     Returns:
         None
@@ -311,16 +315,20 @@ async def delete_session(session_id: str, current_session: Session = Depends(get
     try:
         # Sanitize inputs
         sanitized_session_id = sanitize_string(session_id)
-        sanitized_current_session = sanitize_string(current_session.id)
 
-        # Verify the session ID matches the authenticated session
-        if sanitized_session_id != sanitized_current_session:
-            raise HTTPException(status_code=403, detail="Cannot delete other sessions")
+        # Get the session to be deleted
+        session_to_delete = await db_service.get_session(sanitized_session_id)
+        if not session_to_delete:
+            raise HTTPException(status_code=404, detail="Session not found")
+
+        # Verify the session belongs to the current user
+        if session_to_delete.user_id != current_user.id:
+            raise HTTPException(status_code=403, detail="Cannot delete sessions of other users")
 
         # Delete the session
         await db_service.delete_session(sanitized_session_id)
 
-        logger.info("session_deleted", session_id=session_id, user_id=current_session.user_id)
+        logger.info("session_deleted", session_id=session_id, user_id=current_user.id)
     except ValueError as ve:
         logger.error("session_deletion_validation_failed", error=str(ve), session_id=session_id, exc_info=True)
         raise HTTPException(status_code=422, detail=str(ve))

@@ -1,12 +1,18 @@
 """This file contains the main application entry point."""
 
+import asyncio
 import os
+import sys
 from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import (
     Any,
     Dict,
 )
+
+# Fix for Windows asyncio compatibility with psycopg
+if sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 from dotenv import load_dotenv
 from fastapi import (
