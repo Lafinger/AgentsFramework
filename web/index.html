@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,14 +11,14 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -26,25 +27,25 @@
             padding: 30px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         }
-        
+
         .header {
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 2px solid #e1e8ed;
         }
-        
+
         .header h1 {
             color: #2c3e50;
             font-size: 2.5em;
             margin-bottom: 10px;
         }
-        
+
         .header p {
             color: #7f8c8d;
             font-size: 1.1em;
         }
-        
+
         .status {
             text-align: center;
             padding: 10px;
@@ -52,31 +53,31 @@
             margin-bottom: 20px;
             font-weight: bold;
         }
-        
+
         .status.success {
             background: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
-        
+
         .status.error {
             background: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-        
+
         .status.info {
             background: #cce7ff;
             color: #004085;
             border: 1px solid #b8daff;
         }
-        
+
         .tab-container {
             display: flex;
             justify-content: center;
             margin-bottom: 30px;
         }
-        
+
         .tab {
             padding: 12px 24px;
             background: #f8f9fa;
@@ -86,28 +87,28 @@
             color: #495057;
             border-right: none;
         }
-        
+
         .tab:first-child {
             border-top-left-radius: 8px;
             border-bottom-left-radius: 8px;
         }
-        
+
         .tab:last-child {
             border-top-right-radius: 8px;
             border-bottom-right-radius: 8px;
             border-right: 1px solid #dee2e6;
         }
-        
+
         .tab.active {
             background: #007bff;
             color: white;
             border-color: #007bff;
         }
-        
+
         .tab:hover:not(.active) {
             background: #e9ecef;
         }
-        
+
         .section {
             display: none;
             background: #f8f9fa;
@@ -115,23 +116,25 @@
             padding: 25px;
             margin-bottom: 20px;
         }
-        
+
         .section.active {
             display: block;
         }
-        
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
             color: #2c3e50;
         }
-        
-        .form-group input, .form-group textarea, .form-group select {
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
             width: 100%;
             padding: 12px;
             border: 2px solid #e1e8ed;
@@ -139,12 +142,14 @@
             font-size: 16px;
             transition: border-color 0.3s;
         }
-        
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
             border-color: #007bff;
         }
-        
+
         .btn {
             padding: 12px 24px;
             background: #007bff;
@@ -158,28 +163,28 @@
             margin-right: 10px;
             margin-bottom: 10px;
         }
-        
+
         .btn:hover {
             background: #0056b3;
             transform: translateY(-2px);
         }
-        
+
         .btn.danger {
             background: #dc3545;
         }
-        
+
         .btn.danger:hover {
             background: #c82333;
         }
-        
+
         .btn.success {
             background: #28a745;
         }
-        
+
         .btn.success:hover {
             background: #1e7e34;
         }
-        
+
         .response-area {
             margin-top: 20px;
             padding: 20px;
@@ -192,13 +197,13 @@
             font-family: monospace;
             font-size: 14px;
         }
-        
+
         .chat-container {
             display: flex;
             gap: 20px;
             height: 600px;
         }
-        
+
         .chat-messages {
             flex: 1;
             border: 2px solid #e1e8ed;
@@ -208,40 +213,40 @@
             overflow-y: auto;
             max-height: 100%;
         }
-        
+
         .message {
             margin-bottom: 15px;
             padding: 12px;
             border-radius: 8px;
         }
-        
+
         .message.user {
             background: #007bff;
             color: white;
             margin-left: 20%;
         }
-        
+
         .message.assistant {
             background: #f8f9fa;
             color: #2c3e50;
             margin-right: 20%;
             border: 1px solid #e1e8ed;
         }
-        
+
         .message.system {
             background: #ffc107;
             color: #212529;
             text-align: center;
             margin: 0;
         }
-        
+
         .chat-input-area {
             width: 300px;
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
-        
+
         .sessions-list {
             background: white;
             border: 2px solid #e1e8ed;
@@ -249,7 +254,7 @@
             padding: 15px;
             margin-bottom: 20px;
         }
-        
+
         .session-item {
             padding: 15px;
             border: 1px solid #e1e8ed;
@@ -261,64 +266,64 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .session-item:hover {
             background: #f8f9fa;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        
+
         .session-item.active {
             background: #007bff;
             color: white;
-            box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
         }
-        
+
         .session-info {
             flex: 1;
         }
-        
+
         .session-actions {
             display: flex;
             gap: 8px;
             flex-shrink: 0;
         }
-        
+
         .btn-small {
             padding: 6px 12px;
             font-size: 12px;
             min-width: auto;
         }
-        
+
         .session-item.active .btn-small {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
-        
+
         .session-item.active .btn-small.danger {
-            background: rgba(220,53,69,0.8);
-            border-color: rgba(220,53,69,0.8);
+            background: rgba(220, 53, 69, 0.8);
+            border-color: rgba(220, 53, 69, 0.8);
         }
-        
+
         .session-item.active .btn-small:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
         }
-        
+
         .session-item.active .btn-small.danger:hover {
-            background: rgba(220,53,69,1);
+            background: rgba(220, 53, 69, 1);
         }
-        
+
         .hidden {
             display: none;
         }
-        
+
         .loading {
             text-align: center;
             color: #007bff;
             font-style: italic;
         }
-        
+
         .streaming-indicator {
             background: #17a2b8;
             color: white;
@@ -328,17 +333,25 @@
             display: inline-block;
             margin-bottom: 10px;
         }
-        
+
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
         }
-        
+
         .pulse {
             animation: pulse 1.5s infinite;
         }
-        
+
         .session-name-input {
             display: inline-block;
             width: 150px;
@@ -349,23 +362,24 @@
             border-radius: 4px;
             background: white;
         }
-        
+
         .session-name-input:focus {
             outline: none;
             border-color: #0056b3;
-            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
             <h1>🤖 AgentsFramework Test Interface</h1>
             <p>Comprehensive testing interface for all AgentsFramework APIs</p>
         </div>
-        
+
         <div id="status" class="status hidden"></div>
-        
+
         <div class="tab-container">
             <div class="tab active" onclick="showSection('system')">System Health</div>
             <div class="tab" onclick="showSection('auth')">Authentication</div>
@@ -373,7 +387,7 @@
             <div class="tab" onclick="showSection('chat')">Chat</div>
             <div class="tab" onclick="showSection('history')">Message History</div>
         </div>
-        
+
         <!-- System Health Section -->
         <div id="system-section" class="section active">
             <h3>System Health & Information</h3>
@@ -382,7 +396,7 @@
             <button class="btn" onclick="getApiHealth()">Get API Health</button>
             <div id="system-response" class="response-area"></div>
         </div>
-        
+
         <!-- Authentication Section -->
         <div id="auth-section" class="section">
             <h3>User Authentication</h3>
@@ -390,7 +404,7 @@
                 <label>API Base URL:</label>
                 <input type="text" id="apiUrl" value="http://localhost:8000" placeholder="http://localhost:8000">
             </div>
-            
+
             <h4>Register User</h4>
             <div class="form-group">
                 <label>Email:</label>
@@ -398,10 +412,11 @@
             </div>
             <div class="form-group">
                 <label>Password:</label>
-                <input type="password" id="registerPassword" placeholder="Must contain uppercase, lowercase, number, special character">
+                <input type="password" id="registerPassword"
+                    placeholder="Must contain uppercase, lowercase, number, special character">
             </div>
             <button class="btn" onclick="registerUser()">Register</button>
-            
+
             <h4>Login User</h4>
             <div class="form-group">
                 <label>Email:</label>
@@ -412,10 +427,10 @@
                 <input type="password" id="loginPassword" placeholder="Your password">
             </div>
             <button class="btn success" onclick="loginUser()">Login</button>
-            
+
             <div id="auth-response" class="response-area"></div>
         </div>
-        
+
         <!-- Sessions Section -->
         <div id="sessions-section" class="section">
             <h3>Session Management</h3>
@@ -423,30 +438,31 @@
                 <label>User Token (for session operations):</label>
                 <input type="text" id="sessionToken" placeholder="User token from login" readonly>
             </div>
-            
+
             <div class="status info">
                 <strong>Step 1:</strong> Login first to get a user token<br>
                 <strong>Step 2:</strong> Create a new session to get a session token<br>
                 <strong>Step 3:</strong> Use session token for chatting
             </div>
-            
+
             <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                 <button class="btn" onclick="createSession()">Create New Session</button>
                 <button class="btn success" onclick="getSessions()">Refresh Sessions List</button>
             </div>
-            
+
             <div class="status info">
-                <strong>Tip:</strong> Click on any session below to select it, then use "Use for Chat" to start chatting, or "Delete" to remove it.
+                <strong>Tip:</strong> Click on any session below to select it, then use "Use for Chat" to start
+                chatting, or "Delete" to remove it.
             </div>
-            
+
             <div class="sessions-list" id="sessionsList">
                 <h4>Active Sessions:</h4>
                 <div id="sessionsContainer"></div>
             </div>
-            
+
             <div id="sessions-response" class="response-area"></div>
         </div>
-        
+
         <!-- Chat Section -->
         <div id="chat-section" class="section">
             <h3>Chat Interface</h3>
@@ -454,30 +470,30 @@
                 <label>Session Token (for chat operations):</label>
                 <input type="text" id="chatToken" placeholder="Session token from created session" readonly>
             </div>
-            
+
             <div class="status info">
                 <strong>Note:</strong> You need a session token to chat. Create a session first!
             </div>
-            
+
             <div class="chat-container">
                 <div class="chat-messages" id="chatMessages">
                     <div class="message system">Chat messages will appear here...</div>
                 </div>
-                
+
                 <div class="chat-input-area">
                     <div class="form-group">
                         <label>Message:</label>
                         <textarea id="chatInput" rows="4" placeholder="Type your message here..."></textarea>
                     </div>
-                    
+
                     <button class="btn" onclick="sendMessage()">Send Message</button>
                     <button class="btn success" onclick="sendStreamMessage()">Send Stream Message</button>
                     <button class="btn danger" onclick="clearChat()">Clear Chat</button>
-                    
+
                 </div>
             </div>
         </div>
-        
+
         <!-- Message History Section -->
         <div id="history-section" class="section">
             <h3>Message History</h3>
@@ -485,18 +501,19 @@
                 <label>Session Token (for history operations):</label>
                 <input type="text" id="historyToken" placeholder="Session token from created session" readonly>
             </div>
-            
+
             <div class="status info">
                 <strong>Note:</strong> You need a session token to get message history.
             </div>
-            
+
             <button class="btn" onclick="getMessageHistory()">Get Message History</button>
             <button class="btn danger" onclick="clearMessageHistory()">Clear History</button>
-            
+
             <div id="history-response" class="response-area"></div>
         </div>
     </div>
-    
+
     <script src="app.js"></script>
 </body>
+
 </html>

@@ -55,7 +55,11 @@ async def lifespan(app: FastAPI):
         version=settings.VERSION,
         api_prefix=settings.API_V1_STR,
     )
+    
+    logger.info(f"system platform is {sys.platform}")
+
     yield
+
     logger.info("application_shutdown")
 
 
