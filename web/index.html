@@ -198,6 +198,15 @@
             font-size: 14px;
         }
 
+        .response-area.compact {
+            max-height: 220px;
+        }
+
+        .rag-info {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
         .chat-container {
             display: flex;
             gap: 20px;
@@ -385,6 +394,7 @@
             <div class="tab" onclick="showSection('auth')">Authentication</div>
             <div class="tab" onclick="showSection('sessions')">Sessions</div>
             <div class="tab" onclick="showSection('chat')">Chat</div>
+            <div class="tab" onclick="showSection('rag')">RAG</div>
             <div class="tab" onclick="showSection('history')">Message History</div>
         </div>
 
@@ -492,6 +502,34 @@
 
                 </div>
             </div>
+        </div>
+
+        <!-- RAG Section -->
+        <div id="rag-section" class="section">
+            <h3>Retrieval Augmented Generation</h3>
+            <p class="rag-info">Ask a question about the project and the lightweight knowledge base will surface the most relevant notes.</p>
+
+            <div class="form-group">
+                <label>Question:</label>
+                <textarea id="ragQuestion" rows="4" placeholder="e.g. What does the LangGraph agent do?"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Top K Documents:</label>
+                <input type="number" id="ragTopK" value="3" min="1" max="10">
+            </div>
+
+            <button class="btn" onclick="runRagQuery()">Run RAG Query</button>
+            <button class="btn success" onclick="loadRagDocuments()">Reload Knowledge Base</button>
+
+            <h4 style="margin-top: 20px;">Knowledge Base Preview</h4>
+            <div id="rag-documents" class="response-area compact"></div>
+
+            <h4 style="margin-top: 20px;">Answer</h4>
+            <div id="rag-answer" class="response-area"></div>
+
+            <h4 style="margin-top: 20px;">Sources</h4>
+            <div id="rag-sources" class="response-area"></div>
         </div>
 
         <!-- Message History Section -->

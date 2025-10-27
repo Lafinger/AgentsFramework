@@ -1,0 +1,20 @@
+[
+  {
+    "id": "doc-001",
+    "title": "Framework Overview",
+    "content": "AgentsFramework is a FastAPI and LangGraph based starter template that exposes authentication, chat, and monitoring endpoints. It bundles rate limiting, structured logging, Prometheus metrics, and Langfuse tracing so teams can ship production ready language agent services.",
+    "tags": ["introduction", "architecture"]
+  },
+  {
+    "id": "doc-002",
+    "title": "LangGraph Agent Flow",
+    "content": "The LangGraphAgent builds a state graph with chat and tool_call nodes. It prepares the message history with a system prompt, retries OpenAI compatible LLM calls, and optionally executes DuckDuckGo search results when the model returns tool calls. Conversation state is checkpointed to PostgreSQL.",
+    "tags": ["langgraph", "agent"]
+  },
+  {
+    "id": "doc-003",
+    "title": "Running The Project",
+    "content": "To run the project locally install dependencies with pip install -e ., ensure PostgreSQL is available, and start uvicorn app.main:app --reload. The web directory contains a static test interface that can be opened directly or served with python -m http.server 3000 --directory web.",
+    "tags": ["operations", "quickstart"]
+  }
+]

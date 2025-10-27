@@ -6,6 +6,7 @@ let selectedSession = null; // Currently selected session object
 let allSessions = [];      // Store all user sessions
 let chatMessages = [];
 let isStreaming = false;
+let ragDocuments = [];
 
 // Utility functions
 function showStatus(message, type = 'info') {
@@ -616,6 +617,114 @@ function clearChat() {
     showStatus('Chat cleared', 'success');
 }
 
+// RAG API calls
+function renderRagDocuments() {
+    const container = document.getElementById('rag-documents');
+    if (!container) {
+        return;
+    }
+
+    if (!ragDocuments.length) {
+        container.textContent = 'Knowledge base is empty. Click "Reload Knowledge Base" to refresh.';
+        return;
+    }
+
+    const entries = ragDocuments.map((doc, index) => {
+        const tags = doc.tags && doc.tags.length ? `Tags: ${doc.tags.join(', ')}` : 'Tags: n/a';
+        return `${index + 1}. ${doc.title}\n${tags}\n${doc.content}`;
+    });
+    container.textContent = entries.join('\n\n');
+}
+
+async function loadRagDocuments(showNotification = true) {
+    try {
+        if (showNotification) {
+            showStatus('Loading knowledge base...', 'info');
+        }
+
+        const response = await fetch(`${getApiUrl()}/api/v1/rag/documents`);
+        const data = await response.json();
+
+        if (response.ok) {
+            ragDocuments = data;
+            renderRagDocuments();
+            if (showNotification) {
+                showStatus('Knowledge base loaded!', 'success');
+            }
+        } else {
+            if (showNotification) {
+                showStatus('Failed to load knowledge base', 'error');
+            }
+            document.getElementById('rag-documents').textContent = JSON.stringify(data, null, 2);
+        }
+    } catch (error) {
+        if (showNotification) {
+            showStatus('Failed to load knowledge base', 'error');
+        }
+        const container = document.getElementById('rag-documents');
+        if (container) {
+            container.textContent = `Error: ${error.message}`;
+        }
+    }
+}
+
+async function runRagQuery() {
+    const questionInput = document.getElementById('ragQuestion');
+    const topKInput = document.getElementById('ragTopK');
+    const answerContainer = document.getElementById('rag-answer');
+    const sourcesContainer = document.getElementById('rag-sources');
+
+    if (!questionInput || !topKInput || !answerContainer || !sourcesContainer) {
+        showStatus('RAG UI components missing from the page', 'error');
+        return;
+    }
+
+    const question = questionInput.value.trim();
+    if (!question) {
+        showStatus('Please enter a question before running the RAG query', 'error');
+        return;
+    }
+
+    const parsedTopK = parseInt(topKInput.value, 10);
+    const topK = Number.isNaN(parsedTopK) ? 3 : Math.min(Math.max(parsedTopK, 1), 10);
+    topKInput.value = topK;
+
+    try {
+        showStatus('Running RAG query...', 'info');
+        const response = await fetch(`${getApiUrl()}/api/v1/rag/query`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ question, top_k: topK })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            answerContainer.textContent = data.answer || 'No answer returned.';
+            if (data.sources && data.sources.length > 0) {
+                const formattedSources = data.sources.map((source, index) => {
+                    const tags = source.tags && source.tags.length ? source.tags.join(', ') : 'n/a';
+                    return `${index + 1}. ${source.title} (score: ${source.score})\nTags: ${tags}\nSnippet: ${source.snippet}`;
+                }).join('\n\n');
+                sourcesContainer.textContent = formattedSources;
+            } else {
+                sourcesContainer.textContent = 'No supporting documents found.';
+            }
+            showStatus('RAG query completed!', 'success');
+        } else {
+            showStatus('RAG query failed', 'error');
+            answerContainer.textContent = JSON.stringify(data, null, 2);
+            sourcesContainer.textContent = '';
+        }
+    } catch (error) {
+        showStatus('RAG query request failed', 'error');
+        answerContainer.textContent = `Error: ${error.message}`;
+        sourcesContainer.textContent = '';
+    }
+}
+
 // Message History API calls
 async function getMessageHistory() {
     if (!sessionToken) {
@@ -754,13 +863,19 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         checkHealth();
     }, 1000);
+
+    // Preload RAG knowledge base snapshot
+    loadRagDocuments(false);
     
     // Setup keyboard shortcuts
-    document.getElementById('chatInput').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && e.ctrlKey) {
-            sendMessage();
-        }
-    });
+    const chatInput = document.getElementById('chatInput');
+    if (chatInput) {
+        chatInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                sendMessage();
+            }
+        });
+    }
     
     // Setup form enter key handlers
     const enterKeyInputs = ['registerPassword', 'loginPassword'];
@@ -778,4 +893,13 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+
+    const ragQuestionInput = document.getElementById('ragQuestion');
+    if (ragQuestionInput) {
+        ragQuestionInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                runRagQuery();
+            }
+        });
+    }
 });
